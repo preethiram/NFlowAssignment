@@ -15,7 +15,7 @@ import myapps.com.nflowassignment.model.StoryCardModel;
 public class Util {
 
     public static String CARDOBJECT="CardObject";
-    public static String BASE_URL="https://gist.githubusercontent.com";
+    public static String BASE_URL="https://gist.githubusercontent.com/";
 
     public static List<StoryCardModel> sortByDate(List<StoryCardModel> list){
 

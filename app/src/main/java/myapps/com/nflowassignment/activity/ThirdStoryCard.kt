@@ -5,47 +5,55 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
+import android.util.Log
 import android.widget.*
-import io.reactivex.disposables.Disposable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import myapps.com.nflowassignment.R
 import myapps.com.nflowassignment.Util
 import myapps.com.nflowassignment.adapter.StoryCardAdapter
+import myapps.com.nflowassignment.api.ApiClient
 import myapps.com.nflowassignment.api.ApiInterface
 import myapps.com.nflowassignment.listnerinterface.RecyclerClickListner
+import myapps.com.nflowassignment.model.GenderModel
 import myapps.com.nflowassignment.model.StoryCardModel
-import java.util.*
-import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 class ThirdStoryCard : AppCompatActivity() ,RecyclerClickListner{
-
+    private var myCompositeDisposable: CompositeDisposable? = CompositeDisposable();
+    private var myRetrogenderArrayList:ArrayList<GenderModel> = ArrayList()
     var mListRecyclerView: RecyclerView? = null
     var mAdapter: StoryCardAdapter? = null
     var GENDER_MALE:String ="Male"
     var GENDER_FEMALE:String="Female"
     var dataList  =  ArrayList<StoryCardModel>();
     var genderList:ArrayList<StoryCardModel> = ArrayList<StoryCardModel>();
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_third_story_card)
 
         var gender : RadioGroup?= findViewById(R.id.gender)
 
-             getData();
+             getData()
+        loadJSON()
         mListRecyclerView = findViewById(R.id.recyclerView)
         mListRecyclerView?.setLayoutManager( LinearLayoutManager(this));
         mAdapter =  StoryCardAdapter(genderList,this);
         mListRecyclerView?.setAdapter(mAdapter);
+
         gender?.setOnCheckedChangeListener(
                 RadioGroup.OnCheckedChangeListener { group, checkedId ->
                     val radio: RadioButton = findViewById(checkedId)
                     genderList.clear()
                     if(radio.id==R.id.gender_female){
-
-                        getFilterList(GENDER_FEMALE, genderList)
+                          genderList.addAll(myRetrogenderArrayList.get(1).females)
+                       // getFilterList(GENDER_FEMALE, genderList)
 
                     }else if(radio.id==R.id.gender_male){
-                        getFilterList(GENDER_MALE, genderList)
+                        genderList.addAll(myRetrogenderArrayList.get(0).males)
+                      //  getFilterList(GENDER_MALE, genderList)
                     }
                     mAdapter?.notifyDataSetChanged();
                 })
@@ -53,7 +61,6 @@ class ThirdStoryCard : AppCompatActivity() ,RecyclerClickListner{
 
     private fun getFilterList(gender :String, filteredDataList:ArrayList<StoryCardModel>) :List<StoryCardModel> {
 
-        //val filteredArticleList = dataList.stream().filter { dataList -> data.category.contains(gender) }.collect(Collectors.toList())
         dataList.forEach(){
             if(it.category.equals( gender)){
                 filteredDataList.add(it)
@@ -92,5 +99,34 @@ class ThirdStoryCard : AppCompatActivity() ,RecyclerClickListner{
     }
 
 
+    private fun loadJSON() {
 
+
+        val requestInterface=  ApiClient.getClient().create(ApiInterface::class.java)
+
+        myCompositeDisposable?.add(requestInterface.getGenderData()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse, this::handleError))
+
+    }
+
+    private fun handleResponse(genderData: List<GenderModel>) {
+
+        myRetrogenderArrayList.addAll(genderData)
+
+    }
+
+    private fun handleError(error: Throwable) {
+
+        Log.d("ERROR", error.localizedMessage)
+
+
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myCompositeDisposable?.dispose()
+    }
 }
