@@ -29,34 +29,43 @@ class ThirdStoryCard : AppCompatActivity() ,RecyclerClickListner{
     var GENDER_FEMALE:String="Female"
     var dataList  =  ArrayList<StoryCardModel>();
     var genderList:ArrayList<StoryCardModel> = ArrayList<StoryCardModel>();
-
+    var gender : RadioGroup?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_third_story_card)
-
-        var gender : RadioGroup?= findViewById(R.id.gender)
-
-             getData()
+       initializeViews()
+        getData()
         loadJSON()
-        mListRecyclerView = findViewById(R.id.recyclerView)
-        mListRecyclerView?.setLayoutManager( LinearLayoutManager(this));
-        mAdapter =  StoryCardAdapter(genderList,this);
-        mListRecyclerView?.setAdapter(mAdapter);
+        setAdapter()
 
         gender?.setOnCheckedChangeListener(
                 RadioGroup.OnCheckedChangeListener { group, checkedId ->
                     val radio: RadioButton = findViewById(checkedId)
                     genderList.clear()
                     if(radio.id==R.id.gender_female){
+                           if(myRetrogenderArrayList.get(1).females!=null)
                           genderList.addAll(myRetrogenderArrayList.get(1).females)
                        // getFilterList(GENDER_FEMALE, genderList)
 
                     }else if(radio.id==R.id.gender_male){
+                        if(myRetrogenderArrayList.get(0).males!=null)
                         genderList.addAll(myRetrogenderArrayList.get(0).males)
                       //  getFilterList(GENDER_MALE, genderList)
                     }
                     mAdapter?.notifyDataSetChanged();
                 })
+    }
+
+
+    private fun initializeViews() {
+        gender = findViewById(R.id.gender)
+        mListRecyclerView = findViewById(R.id.recyclerView)
+    }
+
+    private fun setAdapter() {
+        mListRecyclerView?.setLayoutManager( LinearLayoutManager(this));
+        mAdapter =  StoryCardAdapter(genderList,this);
+        mListRecyclerView?.setAdapter(mAdapter);
     }
 
     private fun getFilterList(gender :String, filteredDataList:ArrayList<StoryCardModel>) :List<StoryCardModel> {
@@ -77,12 +86,7 @@ class ThirdStoryCard : AppCompatActivity() ,RecyclerClickListner{
 
     private fun getData(): List<StoryCardModel> {
 
-        /*Ryan - 63 - 1546341851000
-        Sam - 86 - 1536442851000
-        Joey - 78 - 1546442992000
-        Melissa - 91 - 1540341851000
-        Jess - 93 - 1540341751000
-        Carly - 89 - 1540341651000*/
+
         val storyCardModel1= StoryCardModel("Ryan", 85, "1546341851000",GENDER_MALE)
         dataList.add(storyCardModel1)
         val storyCardModel2= StoryCardModel("Melissa", 90, "1540341851000",GENDER_FEMALE)
