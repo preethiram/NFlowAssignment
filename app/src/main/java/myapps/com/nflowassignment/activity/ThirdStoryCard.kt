@@ -7,9 +7,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.*
+import io.reactivex.disposables.Disposable
 import myapps.com.nflowassignment.R
 import myapps.com.nflowassignment.Util
 import myapps.com.nflowassignment.adapter.StoryCardAdapter
+import myapps.com.nflowassignment.api.ApiInterface
 import myapps.com.nflowassignment.listnerinterface.RecyclerClickListner
 import myapps.com.nflowassignment.model.StoryCardModel
 import java.util.*
@@ -57,11 +59,13 @@ class ThirdStoryCard : AppCompatActivity() ,RecyclerClickListner{
                 filteredDataList.add(it)
             }
         }
-      
+
         return Util.sortByDate(filteredDataList)
     }
     override fun onItemSelected(cardModel: StoryCardModel) {
-
+        val intent = Intent(this, DetailsActivity::class.java)
+        intent.putExtra(Util.CARDOBJECT, cardModel)
+        startActivity(intent)
     }
 
     private fun getData(): List<StoryCardModel> {
@@ -87,9 +91,6 @@ class ThirdStoryCard : AppCompatActivity() ,RecyclerClickListner{
         return dataList;
     }
 
-    public fun femaleBtnClickEvent(v: View){
-
-    }
 
 
 }

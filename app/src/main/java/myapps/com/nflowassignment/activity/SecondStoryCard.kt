@@ -48,10 +48,15 @@ class SecondStoryCard : AppCompatActivity() {
 
     }
     public fun detailsBtnClickEvent(v: View){
+        callActivity()
+
+
+    }
+
+    private fun callActivity() {
         val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra(Util.CARDOBJECT, getRandomList(getData()))
-       startActivity(intent)
-
+        startActivity(intent)
     }
 
 }
