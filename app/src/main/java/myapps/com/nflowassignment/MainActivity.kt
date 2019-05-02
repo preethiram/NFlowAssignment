@@ -20,8 +20,7 @@ class MainActivity : AppCompatActivity() {
         var name :TextView?= findViewById(R.id.txt_name)
         var score :TextView?= findViewById(R.id.txt_score)
         var date :TextView?= findViewById(R.id.txt_date)
-        /*val score=findViewById<TextView>(R.id.txt_score) as TextView
-        val date=findViewById<TextView>(R.id.txt_date) as TextView*/
+
         name?.setText(": "+"Ryan")
         score?.setText(": "+"45")
         date?.setText(": "+getDate())
