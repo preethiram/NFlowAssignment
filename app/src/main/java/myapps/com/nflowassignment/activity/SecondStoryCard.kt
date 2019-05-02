@@ -26,13 +26,13 @@ class SecondStoryCard : AppCompatActivity() {
 
     private fun getData() :ArrayList<StoryCardModel>{
         val dataList =  ArrayList<StoryCardModel>()
-        val storyCardModel1= StoryCardModel("Ryan", 85, "March 30th")
+        val storyCardModel1= StoryCardModel("Ryan", 85, "March 30th","")
         dataList.add(storyCardModel1)
         //Melissa / 90% / <~September 21st
-        val storyCardModel2= StoryCardModel("Melissa", 90, "September 21st")
+        val storyCardModel2= StoryCardModel("Melissa", 90, "September 21st","")
         dataList.add(storyCardModel2)
         //Sam / 98% / <~October 1st
-        val storyCardModel3= StoryCardModel("Sam", 98, "October 1st")
+        val storyCardModel3= StoryCardModel("Sam", 98, "October 1st","")
         dataList.add(storyCardModel3)
       return dataList;
     }

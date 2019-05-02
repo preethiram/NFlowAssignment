@@ -3,5 +3,7 @@
     <string name="name">Name</string>
     <string name="date">Date</string>
     <string name="NScore">Score</string>
+    <string name="Female">Female</string>
+    <string name="male">Male</string>
 
 </resources>
